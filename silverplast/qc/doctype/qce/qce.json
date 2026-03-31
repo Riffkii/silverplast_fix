@@ -1,7 +1,7 @@
 {
  "actions": [],
  "allow_rename": 1,
- "creation": "2026-03-27 09:26:34.942950",
+ "creation": "2026-03-31 13:21:27.038925",
  "doctype": "DocType",
  "engine": "InnoDB",
  "field_order": [
@@ -9,7 +9,7 @@
   "item_code",
   "qty",
   "qc_result",
-  "remarks"
+  "qc_note"
  ],
  "fields": [
   {
@@ -33,22 +33,22 @@
    "fieldname": "qc_result",
    "fieldtype": "Select",
    "label": "QC Result",
-   "options": "Pending\nPass\nReject"
+   "options": "\nPass\nReject"
   },
   {
-   "fieldname": "remarks",
+   "fieldname": "qc_note",
    "fieldtype": "Small Text",
-   "label": "Remarks",
+   "label": "QC Note",
    "max_height": "30px"
   }
  ],
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2026-03-30 13:01:49.900008",
+ "modified": "2026-03-31 15:24:24.490357",
  "modified_by": "Administrator",
  "module": "QC",
- "name": "QC Process",
+ "name": "QCE",
  "owner": "Administrator",
  "permissions": [
   {

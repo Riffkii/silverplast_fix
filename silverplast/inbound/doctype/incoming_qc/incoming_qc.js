@@ -15,26 +15,29 @@ frappe.ui.form.on('Incoming QC', {
             frappe.call({
                 method: 'frappe.client.get_list',
                 args: {
-                    doctype: 'QC Process',
+                    doctype: 'QCT',
                     filters: {
                         source_incoming_qc: frm.doc.name
                     },
                     limit_page_length: 1
                 },
                 callback: function(r) {
+
                     if (!r.message || r.message.length === 0) {
 
                         frm.add_custom_button('Create QC', function() {
 
                             frappe.call({
-                                method: 'silverplast.api.qc_process.create_qc_process',
+                                method: 'silverplast.api.qc.create_qc_checks',
                                 args: {
                                     incoming_qc: frm.doc.name
                                 },
                                 callback: function(res) {
-                                    if (res.message) {
-                                        frappe.set_route('Form', 'QC Process', res.message);
-                                    }
+
+                                    frappe.msgprint("QCT & QCE berhasil dibuat");
+
+                                    frm.reload_doc();
+
                                 }
                             });
 

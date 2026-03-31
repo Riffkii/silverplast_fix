@@ -140,6 +140,12 @@ app_license = "mit"
 doc_events = {
 	"Item Receipt": {
         "after_insert": "silverplast.api.item_receipt.create_incoming_qc"
+    },
+    "QCT": {
+        "on_update": "silverplast.api.qc.on_qc_update"
+    },
+    "QCE": {
+        "on_update": "silverplast.api.qc.on_qc_update"
     }
 }
 

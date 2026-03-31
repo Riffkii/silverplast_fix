@@ -5,5 +5,5 @@
 from frappe.model.document import Document
 
 
-class StockReceiptDocument(Document):
+class QCE(Document):
 	pass

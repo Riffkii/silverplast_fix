@@ -5,5 +5,5 @@
 from frappe.model.document import Document
 
 
-class QCProcess(Document):
+class QCT(Document):
 	pass

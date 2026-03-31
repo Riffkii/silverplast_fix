@@ -13,14 +13,15 @@
   "delivery_file",
   "photo",
   "checklist_ok",
-  "remarks"
+  "qc_result",
+  "qc_note"
  ],
  "fields": [
   {
    "fieldname": "source_qc",
    "fieldtype": "Link",
    "label": "Source QC",
-   "options": "QC Process"
+   "options": "Incoming QC"
   },
   {
    "fieldname": "item_code",
@@ -60,19 +61,25 @@
    "label": "Ok"
   },
   {
-   "fieldname": "remarks",
+   "fieldname": "qc_result",
+   "fieldtype": "Select",
+   "label": "QC Result",
+   "options": "Pass\nConditional Pass\nReject"
+  },
+  {
+   "fieldname": "qc_note",
    "fieldtype": "Small Text",
-   "label": "Remarks",
+   "label": "QC Note",
    "max_height": "30px"
   }
  ],
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2026-03-31 09:03:03.441760",
+ "modified": "2026-03-31 13:29:58.727326",
  "modified_by": "Administrator",
  "module": "Inbound",
- "name": "Stock Receipt Document",
+ "name": "Item Receipt Document",
  "owner": "Administrator",
  "permissions": [
   {
