@@ -6,6 +6,7 @@ def create_incoming_qc(doc, method):
         "doctype": "Incoming QC",
         "source_receipt": doc.name,
         "item_code": doc.item_code,
+        "item_type": doc.item_type,
         "qty_received": doc.qty_received,
         "posting_date": doc.posting_date,
         "remarks": doc.remarks

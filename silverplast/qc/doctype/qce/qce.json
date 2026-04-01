@@ -7,6 +7,7 @@
  "field_order": [
   "source_incoming_qc",
   "item_code",
+  "item_type",
   "qty",
   "qc_result",
   "qc_note"
@@ -40,12 +41,18 @@
    "fieldtype": "Small Text",
    "label": "QC Note",
    "max_height": "30px"
+  },
+  {
+   "fieldname": "item_type",
+   "fieldtype": "Select",
+   "label": "Item Type",
+   "options": "Raw material\nAddictive\nAuxiliary material"
   }
  ],
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2026-03-31 15:24:24.490357",
+ "modified": "2026-04-01 21:00:43.409411",
  "modified_by": "Administrator",
  "module": "QC",
  "name": "QCE",

@@ -6,6 +6,7 @@
  "engine": "InnoDB",
  "field_order": [
   "item_code",
+  "item_type",
   "qty_received",
   "posting_date",
   "backdate_reason",
@@ -39,12 +40,20 @@
    "fieldtype": "Small Text",
    "label": "Remarks",
    "max_height": "30px"
+  },
+  {
+   "fieldname": "item_type",
+   "fieldtype": "Select",
+   "in_list_view": 1,
+   "label": "Item type",
+   "options": "Raw material\nAddictive\nAuxiliary material",
+   "reqd": 1
   }
  ],
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2026-03-31 09:02:47.054599",
+ "modified": "2026-04-01 20:53:24.807233",
  "modified_by": "Administrator",
  "module": "Inbound",
  "name": "Item Receipt",

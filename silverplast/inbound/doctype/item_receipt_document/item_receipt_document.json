@@ -7,6 +7,7 @@
  "field_order": [
   "source_qc",
   "item_code",
+  "item_type",
   "qty",
   "msds_file",
   "rohs_file",
@@ -71,12 +72,18 @@
    "fieldtype": "Small Text",
    "label": "QC Note",
    "max_height": "30px"
+  },
+  {
+   "fieldname": "item_type",
+   "fieldtype": "Select",
+   "label": "Item Type",
+   "options": "Raw material\nAddictive\nAuxiliary material"
   }
  ],
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2026-03-31 13:29:58.727326",
+ "modified": "2026-04-01 21:01:26.234104",
  "modified_by": "Administrator",
  "module": "Inbound",
  "name": "Item Receipt Document",

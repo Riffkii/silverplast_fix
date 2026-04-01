@@ -12,6 +12,7 @@ def create_qc_checks(incoming_qc):
         "doctype": "QCT",
         "source_incoming_qc": source.name,
         "item_code": source.item_code,
+        "item_type": source.item_type,
         "qty": source.qty_received
     }).insert(ignore_permissions=True)
 
@@ -19,6 +20,7 @@ def create_qc_checks(incoming_qc):
         "doctype": "QCE",
         "source_incoming_qc": source.name,
         "item_code": source.item_code,
+        "item_type": source.item_type,
         "qty": source.qty_received
     }).insert(ignore_permissions=True)
 
@@ -104,6 +106,7 @@ def evaluate_qc(source_incoming_qc):
         "doctype": "Item Receipt Document",
         "source_qc": source_incoming_qc,
         "item_code": qct.item_code,
+        "item_type": qct.item_type,
         "qty": qct.qty,
         "qc_result": final_result,
         "qc_note": qc_note

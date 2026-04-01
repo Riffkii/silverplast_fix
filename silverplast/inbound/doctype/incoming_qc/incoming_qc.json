@@ -7,6 +7,7 @@
  "field_order": [
   "source_receipt",
   "item_code",
+  "item_type",
   "qty_received",
   "posting_date",
   "remarks"
@@ -39,12 +40,18 @@
    "fieldtype": "Small Text",
    "label": "Remarks",
    "max_height": "30px"
+  },
+  {
+   "fieldname": "item_type",
+   "fieldtype": "Select",
+   "label": "Item Type",
+   "options": "Raw material\nAddictive\nAuxiliary material"
   }
  ],
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2026-03-31 09:03:41.127513",
+ "modified": "2026-04-01 20:56:57.592864",
  "modified_by": "Administrator",
  "module": "Inbound",
  "name": "Incoming QC",
