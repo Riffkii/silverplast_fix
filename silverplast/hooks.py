@@ -146,6 +146,9 @@ doc_events = {
     },
     "QCE": {
         "on_update": "silverplast.api.qc.on_qc_update"
+    },
+    "Mutasi Barang": {
+        "on_submit": "silverplast.api.mutasi_barang.on_submit_hook"
     }
 }
 
