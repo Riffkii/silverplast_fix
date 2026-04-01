@@ -1,25 +1,25 @@
 {
  "actions": [],
  "allow_rename": 1,
- "creation": "2026-04-01 15:20:37.074610",
+ "creation": "2026-04-01 15:25:42.641607",
  "doctype": "DocType",
  "engine": "InnoDB",
  "field_order": [
-  "section_break_g3wj"
+  "section_break_gz7x"
  ],
  "fields": [
   {
-   "fieldname": "section_break_g3wj",
+   "fieldname": "section_break_gz7x",
    "fieldtype": "Section Break"
   }
  ],
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2026-04-01 15:20:37.074610",
+ "modified": "2026-04-01 15:25:42.641607",
  "modified_by": "Administrator",
  "module": "Mutasi",
- "name": "Mutasi Barang",
+ "name": "Mutasi Barang Item",
  "owner": "Administrator",
  "permissions": [
   {
