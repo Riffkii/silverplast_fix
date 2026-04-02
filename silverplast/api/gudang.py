@@ -9,28 +9,28 @@ from frappe import _
 
 
 @frappe.whitelist()
-def get_child_locations(warehouse_code):
+def get_child_locations(kode_gudang):
     """
     WH-01: Ambil semua Area dan Rak di bawah gudang tertentu.
     Dipanggil dari tombol 'Sub-Lokasi' di form Warehouse.
     """
-    if not warehouse_code:
+    if not kode_gudang:
         frappe.throw(_("Kode gudang tidak boleh kosong."))
 
     children = frappe.db.get_all(
         "Warehouse",
         filters={
-            "parent_warehouse": warehouse_code,
+            "induk_gudang": kode_gudang,
             "status": "Aktif"
         },
-        fields=["warehouse_code", "warehouse_name", "level", "warehouse_type"],
-        order_by="level asc, warehouse_code asc"
+        fields=["kode_gudang", "nama_gudang", "level", "tipe_barang"],
+        order_by="level asc, kode_gudang  asc"
     )
     return children
 
 
 @frappe.whitelist()
-def get_stock_summary(warehouse_code):
+def get_stock_summary(kode_gudang):
     """
     WH-02 & WH-03: Ringkasan stok semua item di gudang ini.
     Dipanggil dari tombol 'Lihat Stok' di form Warehouse.
@@ -51,7 +51,7 @@ def get_stock_summary(warehouse_code):
         FROM `tabStock Ledger Entry` sle
         LEFT JOIN `tabItem` i ON i.name = sle.item_code
         WHERE
-            sle.warehouse = %(warehouse_code)s
+            sle.warehouse = %(kode_gudang)s
             AND sle.is_cancelled = 0
         GROUP BY sle.item_code, sle.stock_uom
         HAVING SUM(sle.actual_qty) > 0
@@ -67,13 +67,13 @@ def get_all_warehouses():
         "Warehouse",
         filters={"status": "Aktif", "level": "Gudang"},
         fields=[
-            "warehouse_code",
-            "warehouse_name",
-            "warehouse_type",
-            "capacity_ton",
-            "current_stock_ton",
+            "kode_gudang",
+            "nama_gudang",
+            "tipe_barang",
+            "kapasitas_ton",
+            "stok_saat_ini_ton",
             "pic",
-            "address"
+            "alamat"
         ],
         order_by="warehouse_code asc"
     )
