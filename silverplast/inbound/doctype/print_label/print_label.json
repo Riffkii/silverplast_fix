@@ -12,9 +12,8 @@
  "fields": [
   {
    "fieldname": "item_code",
-   "fieldtype": "Small Text",
-   "label": "Item Code",
-   "max_height": "30px"
+   "fieldtype": "Data",
+   "label": "Item Code"
   },
   {
    "fieldname": "qty",
@@ -31,7 +30,7 @@
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2026-03-31 16:39:24.874438",
+ "modified": "2026-04-02 09:21:57.640719",
  "modified_by": "Administrator",
  "module": "Inbound",
  "name": "Print Label",

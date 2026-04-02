@@ -21,9 +21,8 @@
   },
   {
    "fieldname": "item_code",
-   "fieldtype": "Small Text",
-   "label": "Item Code",
-   "max_height": "30px"
+   "fieldtype": "Data",
+   "label": "Item Code"
   },
   {
    "fieldname": "qty",
@@ -39,8 +38,7 @@
   {
    "fieldname": "qc_note",
    "fieldtype": "Small Text",
-   "label": "QC Note",
-   "max_height": "30px"
+   "label": "QC Note"
   },
   {
    "fieldname": "item_type",
@@ -52,7 +50,7 @@
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2026-04-01 21:00:43.409411",
+ "modified": "2026-04-02 09:20:29.437900",
  "modified_by": "Administrator",
  "module": "QC",
  "name": "QCE",

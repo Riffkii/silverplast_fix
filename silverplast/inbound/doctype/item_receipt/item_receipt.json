@@ -15,9 +15,8 @@
  "fields": [
   {
    "fieldname": "item_code",
-   "fieldtype": "Small Text",
-   "label": "Item Code",
-   "max_height": "30px"
+   "fieldtype": "Data",
+   "label": "Item Code"
   },
   {
    "fieldname": "qty_received",
@@ -31,15 +30,15 @@
   },
   {
    "fieldname": "backdate_reason",
-   "fieldtype": "Small Text",
+   "fieldtype": "Data",
    "label": "Backdate Reason",
+   "length": 255,
    "max_height": "30px"
   },
   {
    "fieldname": "remarks",
    "fieldtype": "Small Text",
-   "label": "Remarks",
-   "max_height": "30px"
+   "label": "Remarks"
   },
   {
    "fieldname": "item_type",
@@ -53,7 +52,7 @@
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2026-04-01 20:53:24.807233",
+ "modified": "2026-04-02 09:18:27.266134",
  "modified_by": "Administrator",
  "module": "Inbound",
  "name": "Item Receipt",
