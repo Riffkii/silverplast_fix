@@ -9,6 +9,7 @@ def create_incoming_qc(doc, method):
         "item_type": doc.item_type,
         "qty_received": doc.qty_received,
         "posting_date": doc.posting_date,
+        "backdate_reason": doc.backdate_reason,
         "remarks": doc.remarks
     }).insert(ignore_permissions=True)
 

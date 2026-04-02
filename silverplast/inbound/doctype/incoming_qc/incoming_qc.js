@@ -8,6 +8,44 @@
 // });
 
 frappe.ui.form.on('Incoming QC', {
+
+    onload: function(frm) {
+        toggle_backdate_field(frm);
+    },
+
+    refresh: function(frm) {
+        toggle_backdate_field(frm);
+    },
+
+    posting_date: function(frm) {
+        toggle_backdate_field(frm);
+    }
+});
+
+function toggle_backdate_field(frm) {
+
+    let posting_date = frm.doc.posting_date;
+    let today = frappe.datetime.get_today();
+
+    if (!posting_date) {
+        frm.set_df_property('backdate_reason', 'hidden', 1);
+        frm.set_df_property('backdate_reason', 'reqd', 0);
+        frm.set_value('backdate_reason', '');
+        return;
+    }
+
+    if (posting_date < today) {
+        frm.set_df_property('backdate_reason', 'hidden', 0);
+        frm.set_df_property('backdate_reason', 'reqd', 1);
+
+    } else {
+        frm.set_df_property('backdate_reason', 'hidden', 1);
+        frm.set_df_property('backdate_reason', 'reqd', 0);
+        frm.set_value('backdate_reason', '');
+    }
+}
+
+frappe.ui.form.on('Incoming QC', {
     refresh: function(frm) {
 
         if (!frm.doc.__islocal) {

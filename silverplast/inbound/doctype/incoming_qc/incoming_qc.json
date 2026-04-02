@@ -10,6 +10,7 @@
   "item_type",
   "qty_received",
   "posting_date",
+  "backdate_reason",
   "remarks"
  ],
  "fields": [
@@ -44,12 +45,18 @@
    "fieldtype": "Select",
    "label": "Item Type",
    "options": "Raw material\nAddictive\nAuxiliary material"
+  },
+  {
+   "fieldname": "backdate_reason",
+   "fieldtype": "Data",
+   "label": "Backdate Reason",
+   "length": 255
   }
  ],
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2026-04-02 09:19:14.995519",
+ "modified": "2026-04-02 09:27:08.168502",
  "modified_by": "Administrator",
  "module": "Inbound",
  "name": "Incoming QC",
