@@ -75,13 +75,13 @@
    "fieldname": "item_type",
    "fieldtype": "Select",
    "label": "Item Type",
-   "options": "Raw material\nAddictive\nAuxiliary material"
+   "options": "Bahan Baku\nAdditive\nBahan Penolong"
   }
  ],
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2026-04-02 09:21:22.375453",
+ "modified": "2026-04-04 11:26:43.465731",
  "modified_by": "Administrator",
  "module": "Inbound",
  "name": "Item Receipt Document",

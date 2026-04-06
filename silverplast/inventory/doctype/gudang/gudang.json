@@ -1,15 +1,15 @@
 {
  "actions": [],
- "allow_rename": 0,
  "autoname": "field:kode_gudang",
- "creation": "2026-03-31 00:00:00.000000",
+ "creation": "2026-03-31 00:00:00",
  "doctype": "DocType",
  "engine": "InnoDB",
  "field_order": [
   "kode_gudang",
   "nama_gudang",
-  "col_break_info",
   "level",
+  "col_break_info",
+  "kode_barang",
   "tipe_barang",
   "status",
   "section_lokasi",
@@ -27,14 +27,14 @@
  "fields": [
   {
    "bold": 1,
+   "description": "Contoh: GDG-01 (Gudang), GDG-01-A (Area), GDG-01-A-RAK1 (Rak)",
    "fieldname": "kode_gudang",
    "fieldtype": "Data",
    "in_list_view": 1,
    "in_standard_filter": 1,
    "label": "Kode Gudang",
    "reqd": 1,
-   "unique": 1,
-   "description": "Contoh: GDG-01 (Gudang), GDG-01-A (Area), GDG-01-A-RAK1 (Rak)"
+   "unique": 1
   },
   {
    "fieldname": "nama_gudang",
@@ -49,33 +49,33 @@
    "fieldtype": "Column Break"
   },
   {
+   "default": "Gudang",
+   "description": "WH-01: Hierarki Gudang > Area > Rak",
    "fieldname": "level",
    "fieldtype": "Select",
    "in_list_view": 1,
    "in_standard_filter": 1,
    "label": "Level",
    "options": "Gudang\nArea\nRak",
-   "reqd": 1,
-   "default": "Gudang",
-   "description": "WH-01: Hierarki Gudang > Area > Rak"
+   "reqd": 1
   },
   {
+   "description": "WH-03: bahan baku, additive, atau barang hasil produksi",
    "fieldname": "tipe_barang",
    "fieldtype": "Select",
    "in_list_view": 1,
    "in_standard_filter": 1,
    "label": "Tipe Barang",
-   "options": "\nBahan Baku\nAdditive\nBarang Jadi\nCampuran",
-   "reqd": 1,
-   "description": "WH-03: bahan baku, additive, atau barang hasil produksi"
+   "options": "\nBahan Baku\nAdditive\nBarang Jadi\nBahan Penolong\nCampuran",
+   "reqd": 1
   },
   {
+   "default": "Aktif",
    "fieldname": "status",
    "fieldtype": "Select",
    "in_list_view": 1,
    "label": "Status",
    "options": "Aktif\nNon-Aktif",
-   "default": "Aktif",
    "reqd": 1
   },
   {
@@ -84,13 +84,13 @@
    "label": "Lokasi & Kapasitas"
   },
   {
+   "depends_on": "eval:doc.level == 'Area' || doc.level == 'Rak'",
+   "description": "Wajib diisi jika Level = Area atau Rak",
    "fieldname": "induk_gudang",
    "fieldtype": "Link",
    "label": "Induk Gudang",
-   "options": "Gudang",
-   "depends_on": "eval:doc.level == 'Area' || doc.level == 'Rak'",
    "mandatory_depends_on": "eval:doc.level == 'Area' || doc.level == 'Rak'",
-   "description": "Wajib diisi jika Level = Area atau Rak"
+   "options": "Gudang"
   },
   {
    "fieldname": "alamat",
@@ -102,17 +102,17 @@
    "fieldtype": "Column Break"
   },
   {
+   "description": "Silver Plast: 100-200 ton per gudang",
    "fieldname": "kapasitas_ton",
    "fieldtype": "Float",
-   "label": "Kapasitas Maks (Ton)",
-   "description": "Silver Plast: 100-200 ton per gudang"
+   "label": "Kapasitas Maks (Ton)"
   },
   {
+   "description": "Dihitung otomatis dari Mutasi Barang",
    "fieldname": "stok_saat_ini_ton",
    "fieldtype": "Float",
    "label": "Stok Saat Ini (Ton)",
-   "read_only": 1,
-   "description": "Dihitung otomatis dari Mutasi Barang"
+   "read_only": 1
   },
   {
    "fieldname": "section_pic",
@@ -120,10 +120,10 @@
    "label": "Admin / PIC"
   },
   {
+   "description": "1-3 admin per gudang, 3 shift",
    "fieldname": "pic",
    "fieldtype": "Data",
-   "label": "Nama Admin / PIC",
-   "description": "1-3 admin per gudang, 3 shift"
+   "label": "Nama Admin / PIC"
   },
   {
    "fieldname": "telepon",
@@ -139,12 +139,17 @@
    "fieldname": "keterangan",
    "fieldtype": "Small Text",
    "label": "Keterangan Tambahan"
+  },
+  {
+   "fieldname": "kode_barang",
+   "fieldtype": "Data",
+   "label": "Kode Barang"
   }
  ],
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2026-03-31 00:00:00.000000",
+ "modified": "2026-04-04 11:24:22.800659",
  "modified_by": "Administrator",
  "module": "Inventory",
  "name": "Gudang",
@@ -183,7 +188,7 @@
  "search_fields": "nama_gudang,tipe_barang,level",
  "sort_field": "modified",
  "sort_order": "DESC",
+ "states": [],
  "title_field": "nama_gudang",
- "track_changes": 1,
- "states": []
+ "track_changes": 1
 }

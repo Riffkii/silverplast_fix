@@ -5,19 +5,38 @@
  "doctype": "DocType",
  "engine": "InnoDB",
  "field_order": [
-  "qty"
+  "kode_barang",
+  "qty",
+  "status"
  ],
  "fields": [
+  {
+   "fieldname": "kode_barang",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "label": "Kode Barang",
+   "options": "Gudang",
+   "reqd": 1
+  },
   {
    "fieldname": "qty",
    "fieldtype": "Float",
    "label": "Quantity"
+  },
+  {
+   "default": "Draft",
+   "fieldname": "status",
+   "fieldtype": "Select",
+   "hidden": 1,
+   "label": "Status",
+   "options": "Draft\nAccepted",
+   "read_only": 1
   }
  ],
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2026-04-01 20:48:33.062874",
+ "modified": "2026-04-04 14:15:54.664578",
  "modified_by": "Administrator",
  "module": "Production",
  "name": "Material Request Memo",

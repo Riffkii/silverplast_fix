@@ -24,25 +24,45 @@ frappe.ui.form.on('Item Receipt Document', {
 
         if (!frm.is_new()) {
 
-            frm.add_custom_button('Print Label', function() {
-
-                frm.disable_save();
-
-                frappe.call({
-                    method: 'silverplast.api.print_label.create_print_label',
-                    args: {
+            frappe.call({
+                method: 'frappe.client.get_list',
+                args: {
+                    doctype: 'Print Label',
+                    filters: {
                         source_document: frm.doc.name
                     },
-                    callback: function(r) {
-                        if (r.message) {
+                    limit_page_length: 1
+                },
+                callback: function(r) {
 
-                            frm.clear_custom_buttons();
+                    if (!r.message || r.message.length === 0) {
 
-                            frappe.set_route('Form', 'Print Label', r.message);
-                        }
+                        frm.add_custom_button('Print Label', function() {
+
+                            frm.disable_save();
+
+                            frappe.call({
+                                method: 'silverplast.api.print_label.create_print_label',
+                                args: {
+                                    source_document: frm.doc.name
+                                },
+                                callback: function(res) {
+
+                                    if (res.message) {
+
+                                        frappe.msgprint("Print Label berhasil dibuat");
+
+                                        frm.reload_doc();
+
+                                        frappe.set_route('Form', 'Print Label', res.message);
+                                    }
+                                }
+                            });
+
+                        });
+
                     }
-                });
-
+                }
             });
 
         }

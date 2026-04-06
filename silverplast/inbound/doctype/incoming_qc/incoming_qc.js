@@ -72,7 +72,7 @@ frappe.ui.form.on('Incoming QC', {
                                 },
                                 callback: function(res) {
 
-                                    frappe.msgprint("QCT & QCE berhasil dibuat");
+                                    frappe.msgprint("QCT & QCX berhasil dibuat");
 
                                     frm.reload_doc();
 

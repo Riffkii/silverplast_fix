@@ -144,7 +144,7 @@ doc_events = {
     "QCT": {
         "on_update": "silverplast.api.qc.on_qc_update"
     },
-    "QCE": {
+    "QCX": {
         "on_update": "silverplast.api.qc.on_qc_update"
     }
 }

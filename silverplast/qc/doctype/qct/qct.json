@@ -44,13 +44,13 @@
    "fieldname": "item_type",
    "fieldtype": "Select",
    "label": "Item Type",
-   "options": "Raw material\nAddictive\nAuxiliary material"
+   "options": "Bahan Baku\nAdditive\nBahan Penolong"
   }
  ],
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2026-04-02 09:19:46.308417",
+ "modified": "2026-04-04 11:25:38.429228",
  "modified_by": "Administrator",
  "module": "QC",
  "name": "QCT",

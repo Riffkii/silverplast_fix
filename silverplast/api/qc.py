@@ -17,7 +17,7 @@ def create_qc_checks(incoming_qc):
     }).insert(ignore_permissions=True)
 
     frappe.get_doc({
-        "doctype": "QCE",
+        "doctype": "QCX",
         "source_incoming_qc": source.name,
         "item_code": source.item_code,
         "item_type": source.item_type,
@@ -36,12 +36,12 @@ def try_aggregate(source_incoming_qc):
     }):
         return
 
-    qct, qce = get_qc_docs(source_incoming_qc)
+    qct, qcx = get_qc_docs(source_incoming_qc)
 
-    if not qct or not qce:
+    if not qct or not qcx:
         return
 
-    if not qct.qc_result or not qce.qc_result:
+    if not qct.qc_result or not qcx.qc_result:
         return
 
     return evaluate_qc(source_incoming_qc)
@@ -51,17 +51,17 @@ def get_qc_docs(source_incoming_qc):
         "source_incoming_qc": source_incoming_qc
     }, "name")
 
-    qce_name = frappe.db.get_value("QCE", {
+    qcx_name = frappe.db.get_value("QCX", {
         "source_incoming_qc": source_incoming_qc
     }, "name")
 
-    if not qct_name or not qce_name:
+    if not qct_name or not qcx_name:
         return None, None
 
     qct = frappe.get_doc("QCT", qct_name)
-    qce = frappe.get_doc("QCE", qce_name)
+    qcx = frappe.get_doc("QCX", qcx_name)
 
-    return qct, qce
+    return qct, qcx
 
 @frappe.whitelist()
 def evaluate_qc(source_incoming_qc):
@@ -71,16 +71,16 @@ def evaluate_qc(source_incoming_qc):
     }):
         return
 
-    qct, qce = get_qc_docs(source_incoming_qc)
+    qct, qcx = get_qc_docs(source_incoming_qc)
 
-    if not qct or not qce:
+    if not qct or not qcx:
         frappe.throw("QC document tidak lengkap")
 
-    if not qct.qc_result or not qce.qc_result:
+    if not qct.qc_result or not qcx.qc_result:
         frappe.throw("QC belum lengkap")
 
     r1 = qct.qc_result
-    r2 = qce.qc_result
+    r2 = qcx.qc_result
 
     qc_note = ""
     final_result = ""
@@ -94,7 +94,7 @@ def evaluate_qc(source_incoming_qc):
 
     elif (r1 == "Pass" and r2 == "Reject"):
         final_result = "Conditional Pass"
-        qc_note = qce.qc_note or ""
+        qc_note = qcx.qc_note or ""
 
     elif (r1 == "Reject" and r2 == "Reject"):
         final_result = "Reject"
