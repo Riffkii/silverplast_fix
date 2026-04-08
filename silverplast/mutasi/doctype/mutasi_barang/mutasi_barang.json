@@ -84,7 +84,6 @@
   },
   {
    "depends_on": "eval:doc.tanggal_mutasi && doc.tanggal_mutasi < frappe.datetime.nowdate()",
-   "description": "Wajib diisi jika tanggal bukan hari ini",
    "fieldname": "backdate_reason",
    "fieldtype": "Small Text",
    "label": "Alasan Backdate",
@@ -190,21 +189,21 @@
   {
    "fieldname": "section_ref",
    "fieldtype": "Section Break",
-   "label": "Referensi"
+   "label": "Referensi Stok"
   },
   {
-   "description": "Nomor referensi pengiriman",
+   "description": "Nomor referensi transaksi stok keluar",
    "fieldname": "stock_entry_kirim",
    "fieldtype": "Data",
-   "label": "Ref. Kirim",
+   "label": "Ref. Stok Kirim",
    "read_only": 1
   },
   {
    "depends_on": "eval:doc.mutation_type == 'Antar Gudang'",
-   "description": "Nomor referensi penerimaan",
+   "description": "Nomor referensi transaksi stok masuk",
    "fieldname": "stock_entry_terima",
    "fieldtype": "Data",
-   "label": "Ref. Terima",
+   "label": "Ref. Stok Terima",
    "read_only": 1
   },
   {
@@ -222,7 +221,7 @@
  "index_web_pages_for_search": 1,
  "is_submittable": 1,
  "links": [],
- "modified": "2026-04-01 15:20:37.074610",
+ "modified": "2026-04-06 00:00:00.000000",
  "modified_by": "Administrator",
  "module": "Mutasi",
  "name": "Mutasi Barang",
@@ -235,9 +234,8 @@
    "role": "System Manager", "share": 1, "submit": 1, "write": 1
   },
   {
-   "create": 1, "email": 1, "export": 1, "print": 1,
-   "read": 1, "report": 1, "role": "Warehouse Manager",
-   "submit": 1, "write": 1
+   "create": 1, "email": 1, "print": 1, "read": 1,
+   "report": 1, "role": "Warehouse Manager", "submit": 1, "write": 1
   },
   {
    "create": 1, "read": 1, "report": 1,
@@ -255,6 +253,5 @@
   {"color": "Green",  "title": "Selesai"},
   {"color": "Red",    "title": "Dibatalkan"}
  ],
- "title_field": "name",
  "track_changes": 1
 }

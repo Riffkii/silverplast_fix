@@ -6,6 +6,9 @@ from frappe import _
 from frappe.model.document import Document
 from frappe.utils import getdate, nowdate, now_datetime
 
+# Import fungsi utilitas stok custom
+from silverplast.inventory.doctype.stok.stok import catat_transaksi_stok
+
 
 class MutasiBarang(Document):
 
@@ -58,55 +61,78 @@ class MutasiBarang(Document):
             )
 
     # ── Antar Gudang: Kirim ───────────────────────
-    # Tidak buat Stock Entry (tidak pakai ERPNext)
-    # Cukup update status dan catat referensi
 
     def _kirim_barang(self):
-        # Buat nomor referensi internal
-        ref_no = f"KIRIM-{self.name}-{nowdate()}"
+        """
+        BPMN: Pengiriman Barang → update stok (Data Stock)
+        Catat transaksi Pindah Keluar untuk setiap item.
+        """
+        stok_refs = []
 
-        self.db_set("stock_entry_kirim", ref_no)
+        for row in self.items:
+            ref = catat_transaksi_stok(
+                item_code    = row.item_code,
+                item_name    = row.item_name or row.item_code,
+                qty          = row.qty,
+                gudang       = self.source_warehouse,
+                tipe_transaksi = "Pindah Keluar",
+                ref_doctype  = "Mutasi Barang",
+                ref_docname  = self.name,
+                batch_no     = row.batch_no,
+                uom          = row.uom or "Kg",
+                keterangan   = f"Keluar ke {self.destination_warehouse}"
+            )
+            stok_refs.append(ref)
+
+        ref_gabung = ", ".join(stok_refs)
+        self.db_set("stock_entry_kirim", ref_gabung)
         self.db_set("status", "Dikirim")
         self.db_set("dikirim_oleh", frappe.session.user)
         self.db_set("tanggal_kirim", now_datetime())
 
-        # Update stok gudang asal (kurangi)
-        self._update_stok_gudang(
-            kode_gudang=self.source_warehouse,
-            tipe="keluar"
-        )
-
         frappe.msgprint(
-            _("Barang dikirim. Ref: {0}").format(frappe.bold(ref_no)),
-            title=_("Pengiriman Berhasil"),
-            indicator="orange"
+            _("Barang dikirim. {0} transaksi stok dicatat.").format(len(stok_refs)),
+            title=_("Pengiriman Berhasil"), indicator="orange"
         )
 
     # ── Antar Gudang: Terima ──────────────────────
 
     def terima_barang(self):
+        """
+        BPMN: Penerimaan Barang → update stok
+        Catat transaksi Pindah Masuk untuk setiap item.
+        """
         if self.status != "Dikirim":
             frappe.throw(
                 _("Status harus 'Dikirim'. Status saat ini: {0}").format(self.status)
             )
 
-        ref_no = f"TERIMA-{self.name}-{nowdate()}"
+        stok_refs = []
 
-        self.db_set("stock_entry_terima", ref_no)
+        for row in self.items:
+            ref = catat_transaksi_stok(
+                item_code    = row.item_code,
+                item_name    = row.item_name or row.item_code,
+                qty          = row.qty,
+                gudang       = self.destination_warehouse,
+                tipe_transaksi = "Pindah Masuk",
+                ref_doctype  = "Mutasi Barang",
+                ref_docname  = self.name,
+                batch_no     = row.batch_no,
+                uom          = row.uom or "Kg",
+                keterangan   = f"Masuk dari {self.source_warehouse}"
+            )
+            stok_refs.append(ref)
+
+        ref_gabung = ", ".join(stok_refs)
+        self.db_set("stock_entry_terima", ref_gabung)
         self.db_set("status", "Diterima")
         self.db_set("diterima_oleh", frappe.session.user)
         self.db_set("tanggal_terima", now_datetime())
 
-        # Update stok gudang tujuan (tambah)
-        self._update_stok_gudang(
-            kode_gudang=self.destination_warehouse,
-            tipe="masuk"
-        )
-
         frappe.msgprint(
-            _("Barang diterima. Ref: {0}").format(frappe.bold(ref_no)),
-            title=_("Penerimaan Berhasil"),
-            indicator="blue"
+            _("Barang diterima. {0} transaksi stok dicatat.").format(len(stok_refs)),
+            title=_("Penerimaan Berhasil"), indicator="blue"
         )
 
     # ── Antar Gudang: Verifikasi ──────────────────
@@ -121,74 +147,85 @@ class MutasiBarang(Document):
         self.db_set("verified_by", frappe.session.user)
         self.db_set("tanggal_verifikasi", now_datetime())
 
+        from silverplast.inventory.doctype.gudang.gudang import Gudang
+        Gudang.update_stok_gudang(self.source_warehouse)
+        Gudang.update_stok_gudang(self.destination_warehouse)
+
         frappe.msgprint(
             _("Nota {0} diverifikasi. Mutasi selesai.").format(frappe.bold(self.name)),
-            title=_("Verifikasi Berhasil"),
-            indicator="green"
+            title=_("Verifikasi Berhasil"), indicator="green"
         )
 
     # ── Intern Gudang ─────────────────────────────
 
     def _selesaikan_intern(self):
-        ref_no = f"INTERN-{self.name}-{nowdate()}"
+        """
+        BPMN: Pembuatan Nota → Data Stock → Penempatan Ulang
+        Catat Keluar dari area asal dan Masuk ke area tujuan.
+        """
+        stok_refs = []
 
-        self.db_set("stock_entry_kirim", ref_no)
+        for row in self.items:
+            gudang_asal   = row.source_area      or self.source_area_intern      or self.source_warehouse
+            gudang_tujuan = row.destination_area or self.destination_area_intern or self.source_warehouse
+
+            # Keluar dari area asal
+            ref_keluar = catat_transaksi_stok(
+                item_code    = row.item_code,
+                item_name    = row.item_name or row.item_code,
+                qty          = row.qty,
+                gudang       = gudang_asal,
+                tipe_transaksi = "Pindah Keluar",
+                ref_doctype  = "Mutasi Barang",
+                ref_docname  = self.name,
+                batch_no     = row.batch_no,
+                uom          = row.uom or "Kg",
+                keterangan   = f"Intern: pindah ke {gudang_tujuan}"
+            )
+
+            # Masuk ke area tujuan
+            ref_masuk = catat_transaksi_stok(
+                item_code    = row.item_code,
+                item_name    = row.item_name or row.item_code,
+                qty          = row.qty,
+                gudang       = gudang_tujuan,
+                tipe_transaksi = "Pindah Masuk",
+                ref_doctype  = "Mutasi Barang",
+                ref_docname  = self.name,
+                batch_no     = row.batch_no,
+                uom          = row.uom or "Kg",
+                keterangan   = f"Intern: dari {gudang_asal}"
+            )
+
+            stok_refs.extend([ref_keluar, ref_masuk])
+
+        self.db_set("stock_entry_kirim", ", ".join(stok_refs[:3]))  # simpan sebagian ref
         self.db_set("status", "Selesai")
         self.db_set("verified_by", frappe.session.user)
         self.db_set("tanggal_verifikasi", now_datetime())
 
         frappe.msgprint(
-            _("Mutasi intern {0} selesai. Barang siap dipindahkan.").format(
-                frappe.bold(self.name)
-            ),
-            title=_("Selesai"),
-            indicator="green"
+            _("Mutasi intern {0} selesai.").format(frappe.bold(self.name)),
+            title=_("Selesai"), indicator="green"
         )
 
-    # ── Cancel ────────────────────────────────────
+    # ── Cancel: balikkan transaksi stok ──────────
 
     def _batalkan_mutasi(self):
-        # Kembalikan stok jika sudah sempat dikirim/diterima
-        if self.status == "Dikirim":
-            # Kembalikan stok gudang asal
-            self._update_stok_gudang(self.source_warehouse, "masuk")
-
-        elif self.status in ("Diterima", "Selesai"):
-            # Kembalikan stok gudang asal dan kurangi gudang tujuan
-            self._update_stok_gudang(self.source_warehouse, "masuk")
-            if self.destination_warehouse:
-                self._update_stok_gudang(self.destination_warehouse, "keluar")
-
-        frappe.msgprint(
-            _("Mutasi {0} dibatalkan.").format(frappe.bold(self.name))
+        """
+        Tandai semua transaksi Stok terkait sebagai Dibatalkan.
+        """
+        stok_docs = frappe.db.get_all(
+            "Stok",
+            filters={"ref_docname": self.name, "status": "Aktif"},
+            fields=["name"]
         )
 
-    # ── Update stok di DocType Gudang ─────────────
+        for s in stok_docs:
+            frappe.db.set_value("Stok", s.name, "status", "Dibatalkan")
 
-    def _update_stok_gudang(self, kode_gudang, tipe):
-        """
-        Update stok_saat_ini_ton di Gudang berdasarkan
-        total qty item yang dimutasi (konversi Kg -> Ton).
-        tipe: 'masuk' atau 'keluar'
-        """
-        if not kode_gudang:
-            return
-
-        if not frappe.db.exists("Gudang", kode_gudang):
-            return
-
-        # Hitung total qty dari semua item dalam dokumen ini
-        total_kg = sum(row.qty for row in self.items if row.qty)
-        total_ton = round(total_kg / 1000, 3)
-
-        stok_saat_ini = frappe.db.get_value(
-            "Gudang", kode_gudang, "stok_saat_ini_ton"
-        ) or 0
-
-        if tipe == "masuk":
-            stok_baru = stok_saat_ini + total_ton
-        else:
-            stok_baru = max(stok_saat_ini - total_ton, 0)
-
-        frappe.db.set_value("Gudang", kode_gudang, "stok_saat_ini_ton",
-                            round(stok_baru, 3))
+        frappe.msgprint(
+            _("Mutasi {0} dibatalkan. {1} transaksi stok dibatalkan.").format(
+                frappe.bold(self.name), len(stok_docs)
+            )
+        )

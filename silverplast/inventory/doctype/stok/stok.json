@@ -1,0 +1,207 @@
+{
+ "actions": [],
+ "allow_rename": 0,
+ "autoname": "naming_series:",
+ "creation": "2026-04-06 00:00:00.000000",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": [
+  "naming_series",
+  "tanggal",
+  "jam",
+  "col_break_1",
+  "tipe_transaksi",
+  "status",
+  "section_item",
+  "item_code",
+  "item_name",
+  "col_break_item",
+  "qty",
+  "uom",
+  "batch_no",
+  "section_gudang",
+  "gudang",
+  "area_rak",
+  "col_break_gudang",
+  "qty_sebelum",
+  "qty_sesudah",
+  "section_ref",
+  "ref_doctype",
+  "ref_docname",
+  "keterangan"
+ ],
+ "fields": [
+  {
+   "fieldname": "naming_series",
+   "fieldtype": "Select",
+   "label": "Seri",
+   "options": "STK-.YYYY.-",
+   "reqd": 1
+  },
+  {
+   "default": "Today",
+   "fieldname": "tanggal",
+   "fieldtype": "Date",
+   "in_list_view": 1,
+   "in_standard_filter": 1,
+   "label": "Tanggal",
+   "reqd": 1
+  },
+  {
+   "fieldname": "jam",
+   "fieldtype": "Time",
+   "label": "Jam"
+  },
+  {
+   "fieldname": "col_break_1",
+   "fieldtype": "Column Break"
+  },
+  {
+   "bold": 1,
+   "fieldname": "tipe_transaksi",
+   "fieldtype": "Select",
+   "in_list_view": 1,
+   "in_standard_filter": 1,
+   "label": "Tipe Transaksi",
+   "options": "Masuk\nKeluar\nPindah Masuk\nPindah Keluar\nOpname",
+   "reqd": 1
+  },
+  {
+   "default": "Aktif",
+   "fieldname": "status",
+   "fieldtype": "Select",
+   "label": "Status",
+   "options": "Aktif\nDibatalkan",
+   "read_only": 1
+  },
+  {
+   "fieldname": "section_item",
+   "fieldtype": "Section Break",
+   "label": "Barang"
+  },
+  {
+   "fieldname": "item_code",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "in_standard_filter": 1,
+   "label": "Kode Barang",
+   "reqd": 1
+  },
+  {
+   "fieldname": "item_name",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "Nama Barang"
+  },
+  {
+   "fieldname": "col_break_item",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "qty",
+   "fieldtype": "Float",
+   "in_list_view": 1,
+   "label": "QTY",
+   "reqd": 1
+  },
+  {
+   "default": "Kg",
+   "fieldname": "uom",
+   "fieldtype": "Data",
+   "label": "Satuan"
+  },
+  {
+   "fieldname": "batch_no",
+   "fieldtype": "Data",
+   "label": "No. Batch / FIFO"
+  },
+  {
+   "fieldname": "section_gudang",
+   "fieldtype": "Section Break",
+   "label": "Lokasi"
+  },
+  {
+   "fieldname": "gudang",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "in_standard_filter": 1,
+   "label": "Gudang",
+   "options": "Gudang",
+   "reqd": 1
+  },
+  {
+   "fieldname": "area_rak",
+   "fieldtype": "Link",
+   "label": "Area / Rak",
+   "options": "Gudang"
+  },
+  {
+   "fieldname": "col_break_gudang",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "qty_sebelum",
+   "fieldtype": "Float",
+   "label": "Stok Sebelum",
+   "read_only": 1
+  },
+  {
+   "fieldname": "qty_sesudah",
+   "fieldtype": "Float",
+   "label": "Stok Sesudah",
+   "read_only": 1
+  },
+  {
+   "fieldname": "section_ref",
+   "fieldtype": "Section Break",
+   "label": "Referensi"
+  },
+  {
+   "fieldname": "ref_doctype",
+   "fieldtype": "Data",
+   "label": "Sumber Dokumen",
+   "read_only": 1,
+   "description": "Contoh: Mutasi Barang, Item Receipt Document"
+  },
+  {
+   "fieldname": "ref_docname",
+   "fieldtype": "Data",
+   "label": "No. Dokumen Sumber",
+   "read_only": 1
+  },
+  {
+   "fieldname": "keterangan",
+   "fieldtype": "Small Text",
+   "label": "Keterangan"
+  }
+ ],
+ "grid_page_length": 50,
+ "index_web_pages_for_search": 1,
+ "links": [],
+ "modified": "2026-04-06 00:00:00.000000",
+ "modified_by": "Administrator",
+ "module": "Inventory",
+ "name": "Stok",
+ "naming_rule": "By \"Naming Series\" field",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1, "delete": 0, "email": 1, "export": 1,
+   "print": 1, "read": 1, "report": 1, "role": "System Manager",
+   "share": 1, "write": 1
+  },
+  {
+   "read": 1, "report": 1, "role": "Warehouse Manager"
+  },
+  {
+   "read": 1, "report": 1, "role": "Warehouse User"
+  }
+ ],
+ "row_format": "Dynamic",
+ "search_fields": "item_code,gudang,tipe_transaksi",
+ "sort_field": "tanggal",
+ "sort_order": "DESC",
+ "title_field": "item_code",
+ "track_changes": 0,
+ "states": []
+}

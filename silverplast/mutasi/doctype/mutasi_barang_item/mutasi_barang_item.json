@@ -10,6 +10,7 @@
   "qty",
   "uom",
   "batch_no",
+  "source_receipt",
   "section_lokasi",
   "source_area",
   "destination_area",
@@ -22,7 +23,8 @@
    "fieldtype": "Data",
    "in_list_view": 1,
    "label": "Kode Barang",
-   "reqd": 1
+   "reqd": 1,
+   "description": "Isi sesuai item_code di Item Receipt"
   },
   {
    "columns": 2,
@@ -57,6 +59,13 @@
    "fieldtype": "Data",
    "in_list_view": 1,
    "label": "No. Batch / FIFO"
+  },
+  {
+   "fieldname": "source_receipt",
+   "fieldtype": "Link",
+   "label": "Ref. Item Receipt Document",
+   "options": "Item Receipt Document",
+   "description": "Opsional — referensi dokumen asal barang"
   },
   {
    "depends_on": "eval:parent.mutation_type == 'Intern Gudang'",
