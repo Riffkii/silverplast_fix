@@ -1,4 +1,5 @@
 import frappe
+import json
 
 @frappe.whitelist()
 def accept_material_request(docname):
@@ -49,10 +50,12 @@ def accept_material_request(docname):
     return "OK"
 
 @frappe.whitelist()
-def send_to_qc(production_id, qty):
+def send_to_qc(production_id, qty, materials=None):
 
     if not qty or float(qty) <= 0:
         frappe.throw("Qty harus lebih dari 0")
+
+    materials = json.loads(materials) if materials else []
 
     existing = frappe.db.exists(
         "Production Incoming QC",
@@ -63,6 +66,26 @@ def send_to_qc(production_id, qty):
         frappe.throw("Production sudah pernah dikirim ke QC")
 
     prod = frappe.get_doc("Production", production_id)
+
+    for m in materials:
+
+        kode_barang = m.get("kode_barang")
+        qty_sisa = float(m.get("qty_sisa") or 0)
+
+        if qty_sisa <= 0:
+            continue
+
+        gudang = frappe.get_doc("Gudang", kode_barang)
+
+        current_stock = gudang.stok_saat_ini_ton or 0
+        new_stock = current_stock + qty_sisa
+
+        frappe.db.set_value(
+            "Gudang",
+            gudang.name,
+            "stok_saat_ini_ton",
+            new_stock
+        )
 
     doc = frappe.get_doc({
         "doctype": "Production Incoming QC",

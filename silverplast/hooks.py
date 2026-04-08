@@ -146,6 +146,12 @@ doc_events = {
     },
     "QCX": {
         "on_update": "silverplast.api.qc.on_qc_update"
+    },
+    "Production QCT": {
+        "on_update": "silverplast.api.production_qc.on_qc_update_production"
+    },
+    "Production QCX": {
+        "on_update": "silverplast.api.production_qc.on_qc_update_production"
     }
 }
 

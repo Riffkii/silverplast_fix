@@ -99,8 +99,8 @@ def evaluate_qc(source_incoming_qc):
     elif (r1 == "Reject" and r2 == "Reject"):
         final_result = "Reject"
 
-    if final_result == "Reject":
-        frappe.throw("QC Failed: kedua QC Reject")
+    # if final_result == "Reject":
+    #     frappe.throw("QC Failed: kedua QC Reject")
 
     doc = frappe.get_doc({
         "doctype": "Item Receipt Document",

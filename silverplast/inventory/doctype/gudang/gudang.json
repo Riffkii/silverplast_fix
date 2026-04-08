@@ -147,16 +147,16 @@
    "label": "Kode Barang"
   },
   {
+   "depends_on": "eval:doc.tipe_barang == 'Barang Jadi'",
    "fieldname": "rate",
    "fieldtype": "Currency",
-   "label": "Rate",
-   "depends_on": "eval:doc.tipe_barang == 'Barang Jadi'"
+   "label": "Rate"
   }
  ],
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2026-04-07 21:38:17.469940",
+ "modified": "2026-04-08 15:03:02.870387",
  "modified_by": "Administrator",
  "module": "Inventory",
  "name": "Gudang",

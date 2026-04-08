@@ -44,35 +44,89 @@ frappe.ui.form.on('Production', {
 
             frm.add_custom_button('Send To QC', function() {
 
-                let dialog = new frappe.ui.Dialog({
-                    title: 'Send To QC',
-                    fields: [
-                        {
-                            label: 'Quantity',
-                            fieldname: 'qty',
-                            fieldtype: 'Float',
-                            reqd: 1
-                        }
-                    ],
-                    primary_action_label: 'Submit',
-                    primary_action(values) {
+                frappe.call({
+                    method: 'frappe.client.get',
+                    args: {
+                        doctype: 'Material Request Memo',
+                        name: frm.doc.material_request
+                    },
+                    callback: function(res) {
 
-                        frappe.call({
-                            method: 'silverplast.api.production.send_to_qc',
-                            args: {
-                                production_id: frm.doc.name,
-                                qty: values.qty
-                            },
-                            callback: function() {
-                                frappe.msgprint("Berhasil dikirim ke QC");
-                                dialog.hide();
+                        let items = res.message.items || [];
+
+                        let data = items.map(row => {
+                            return {
+                                kode_barang: row.kode_barang,
+                                qty_request: row.qty,
+                                qty_sisa: 0
+                            };
+                        });
+
+                        let dialog = new frappe.ui.Dialog({
+                            title: 'Send To QC',
+                            fields: [
+                                {
+                                    label: 'Quantity',
+                                    fieldname: 'qty',
+                                    fieldtype: 'Float',
+                                    reqd: 1
+                                },
+                                {
+                                    fieldname: 'materials',
+                                    fieldtype: 'Table',
+                                    label: 'Material Sisa',
+                                    cannot_add_rows: true,
+                                    cannot_delete_rows: true,
+                                    in_place_edit: true,
+                                    data: data,
+                                    fields: [
+                                        {
+                                            fieldname: 'kode_barang',
+                                            fieldtype: 'Data',
+                                            label: 'Kode Barang',
+                                            read_only: 1,
+                                            in_list_view: 1
+                                        },
+                                        {
+                                            fieldname: 'qty_request',
+                                            fieldtype: 'Float',
+                                            label: 'Qty Request',
+                                            read_only: 1,
+                                            in_list_view: 1
+                                        },
+                                        {
+                                            fieldname: 'qty_sisa',
+                                            fieldtype: 'Float',
+                                            label: 'Qty Sisa',
+                                            in_list_view: 1
+                                        }
+                                    ]
+                                }
+                            ],
+                            primary_action_label: 'Submit',
+                            primary_action(values) {
+
+                                frappe.call({
+                                    method: 'silverplast.api.production.send_to_qc',
+                                    args: {
+                                        production_id: frm.doc.name,
+                                        qty: values.qty,
+                                        materials: values.materials
+                                    },
+                                    callback: function() {
+                                        frappe.msgprint("Berhasil dikirim ke QC");
+                                        dialog.hide();
+                                        frm.reload_doc();
+                                    }
+                                });
+
                             }
                         });
 
+                        dialog.show();
                     }
                 });
 
-                dialog.show();
             });
 
         }

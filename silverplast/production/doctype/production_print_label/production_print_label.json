@@ -1,25 +1,20 @@
 {
  "actions": [],
  "allow_rename": 1,
- "creation": "2026-04-07 18:00:02.093113",
+ "creation": "2026-04-08 13:44:45.182705",
  "doctype": "DocType",
  "engine": "InnoDB",
  "field_order": [
-  "source_qc",
+  "source_document",
   "item_code",
-  "qty",
-  "qc_result",
-  "qc_note",
-  "rate",
-  "work_hours",
-  "total_rate"
+  "qty"
  ],
  "fields": [
   {
-   "fieldname": "source_qc",
+   "fieldname": "source_document",
    "fieldtype": "Link",
-   "label": "Source QC",
-   "options": "Production Incoming QC"
+   "label": "Source Document",
+   "options": "Production Summary"
   },
   {
    "fieldname": "item_code",
@@ -30,41 +25,15 @@
    "fieldname": "qty",
    "fieldtype": "Float",
    "label": "Quantity"
-  },
-  {
-   "fieldname": "qc_result",
-   "fieldtype": "Select",
-   "label": "QC Result",
-   "options": "Pass\nConditional Pass\nScrap"
-  },
-  {
-   "fieldname": "qc_note",
-   "fieldtype": "Small Text",
-   "label": "QC Note"
-  },
-  {
-   "fieldname": "rate",
-   "fieldtype": "Currency",
-   "label": "Rate"
-  },
-  {
-   "fieldname": "work_hours",
-   "fieldtype": "Float",
-   "label": "Work Hours"
-  },
-  {
-   "fieldname": "total_rate",
-   "fieldtype": "Currency",
-   "label": "Total Rate"
   }
  ],
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2026-04-08 13:56:29.046312",
+ "modified": "2026-04-08 13:47:24.454324",
  "modified_by": "Administrator",
  "module": "Production",
- "name": "Production Summary",
+ "name": "Production Print Label",
  "owner": "Administrator",
  "permissions": [
   {
