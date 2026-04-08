@@ -1,7 +1,5 @@
 import frappe
 
-import frappe
-
 @frappe.whitelist()
 def create_print_label(source_document):
 

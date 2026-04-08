@@ -12,6 +12,7 @@
   "kode_barang",
   "tipe_barang",
   "status",
+  "rate",
   "section_lokasi",
   "induk_gudang",
   "alamat",
@@ -144,12 +145,18 @@
    "fieldname": "kode_barang",
    "fieldtype": "Data",
    "label": "Kode Barang"
+  },
+  {
+   "fieldname": "rate",
+   "fieldtype": "Currency",
+   "label": "Rate",
+   "depends_on": "eval:doc.tipe_barang == 'Barang Jadi'"
   }
  ],
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2026-04-04 11:24:22.800659",
+ "modified": "2026-04-07 21:38:17.469940",
  "modified_by": "Administrator",
  "module": "Inventory",
  "name": "Gudang",

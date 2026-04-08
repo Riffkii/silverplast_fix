@@ -8,11 +8,32 @@
 // });
 
 frappe.ui.form.on('Material Request Memo', {
+    onload: function(frm) {
+        frm.set_query('barang_jadi', function() {
+            return {
+                filters: {
+                    tipe_barang: 'Barang Jadi',
+                    status: 'Aktif'
+                }
+            };
+        });
+    }
+});
+
+frappe.ui.form.on('Material Request Memo', {
+    onload: function(frm) {
+
+        if (frm.is_new() && (!frm.doc.items || frm.doc.items.length === 0)) {
+            let row = frm.add_child('items');
+            frm.refresh_field('items');
+        }
+    },
+
     refresh: function(frm) {
 
-        frm.set_df_property('status', 'hidden', 1);
+        frm.set_df_property('status', 'hidden', frm.is_new());
 
-        frm.set_query('kode_barang', function() {
+        frm.set_query('kode_barang', 'items', function() {
             return {
                 filters: {
                     status: 'Aktif',
@@ -32,9 +53,7 @@ frappe.ui.form.on('Material Request Memo', {
                         docname: frm.doc.name
                     },
                     callback: function() {
-
                         frappe.msgprint("Material berhasil diproses");
-
                         frm.reload_doc();
                     }
                 });

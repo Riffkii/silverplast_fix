@@ -1,46 +1,45 @@
 {
  "actions": [],
  "allow_rename": 1,
- "creation": "2026-04-01 20:43:54.464548",
+ "creation": "2026-04-07 09:55:44.612322",
  "doctype": "DocType",
  "engine": "InnoDB",
  "field_order": [
-  "barang_jadi",
-  "status",
-  "items"
+  "material_request",
+  "item_code",
+  "qc_sent"
  ],
  "fields": [
   {
-   "fieldname": "barang_jadi",
+   "fieldname": "material_request",
    "fieldtype": "Link",
    "in_list_view": 1,
-   "label": "Barang Yang Akan Diproduksi",
-   "options": "Gudang",
+   "label": "Material Request",
+   "options": "Material Request Memo",
    "reqd": 1
   },
   {
-   "default": "Draft",
-   "fieldname": "status",
-   "fieldtype": "Select",
-   "label": "Status",
-   "options": "Draft\nAccepted\nProcessed",
+   "fieldname": "item_code",
+   "fieldtype": "Data",
+   "label": "Item Code",
    "read_only": 1
   },
   {
-   "fieldname": "items",
-   "fieldtype": "Table",
-   "label": "Daftar Bahan",
-   "options": "Material Request Item Memo",
-   "reqd": 1
+   "default": "0",
+   "fieldname": "qc_sent",
+   "fieldtype": "Check",
+   "hidden": 1,
+   "label": "QC Sent",
+   "read_only": 1
   }
  ],
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2026-04-07 15:48:40.565963",
+ "modified": "2026-04-07 16:17:06.682516",
  "modified_by": "Administrator",
  "module": "Production",
- "name": "Material Request Memo",
+ "name": "Production",
  "owner": "Administrator",
  "permissions": [
   {
@@ -60,6 +59,5 @@
  "rows_threshold_for_grid_search": 20,
  "sort_field": "modified",
  "sort_order": "DESC",
- "states": [],
- "title_field": "barang_jadi"
+ "states": []
 }
