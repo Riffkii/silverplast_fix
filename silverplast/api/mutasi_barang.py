@@ -3,6 +3,7 @@
 
 import frappe
 from frappe import _
+from silverplast.inventory.doctype.stok.stok import get_stok_terkini
 
 
 @frappe.whitelist()
@@ -26,8 +27,41 @@ def verifikasi_nota(docname):
 
 
 @frappe.whitelist()
+def cek_stok_tersedia(docname):
+    """
+    Cek apakah stok cukup untuk semua item di dokumen ini.
+    Dipanggil dari JS saat user hover/klik tombol Submit.
+    Return list item dengan info stok tersedia vs diminta.
+    """
+    doc = frappe.get_doc("Mutasi Barang", docname)
+
+    if doc.mutation_type != "Antar Gudang":
+        return {"semua_cukup": True, "detail": []}
+
+    detail = []
+    semua_cukup = True
+
+    for row in doc.items:
+        tersedia = get_stok_terkini(row.item_code, doc.source_warehouse)
+        cukup    = tersedia >= row.qty
+
+        if not cukup:
+            semua_cukup = False
+
+        detail.append({
+            "item_code"  : row.item_code,
+            "qty_diminta": row.qty,
+            "qty_tersedia": tersedia,
+            "uom"        : row.uom or "Kg",
+            "cukup"      : cukup,
+            "selisih"    : tersedia - row.qty
+        })
+
+    return {"semua_cukup": semua_cukup, "detail": detail}
+
+
+@frappe.whitelist()
 def get_mutasi_summary(warehouse=None, from_date=None, to_date=None):
-    """Ringkasan mutasi untuk dashboard."""
     filters = {"docstatus": 1}
     if warehouse:
         filters["source_warehouse"] = warehouse

@@ -1,0 +1,47 @@
+{
+ "actions":[],"allow_rename":0,"autoname":"naming_series:",
+ "creation":"2026-04-08 00:00:00.000000","doctype":"DocType","engine":"InnoDB",
+ "field_order":[
+  "naming_series","status","col_break_header","opname_date","posting_time",
+  "section_scope","warehouse","opname_type","approved_by",
+  "section_items","items",
+  "section_result","total_system_qty","total_actual_qty","total_gain","total_loss","gain_loss_notes",
+  "section_notes","notes"
+ ],
+ "fields":[
+  {"fieldname":"naming_series","fieldtype":"Select","label":"Series","options":"SO-OPN-.YYYY.-","reqd":1},
+  {"bold":1,"default":"Draft","fieldname":"status","fieldtype":"Select","in_list_view":1,"in_standard_filter":1,"label":"Status","options":"Draft\nIn Progress\nRecapitulated\nApproved\nCancelled","read_only":1},
+  {"fieldname":"col_break_header","fieldtype":"Column Break"},
+  {"default":"Today","fieldname":"opname_date","fieldtype":"Date","in_list_view":1,"label":"Opname Date","reqd":1},
+  {"fieldname":"posting_time","fieldtype":"Time","label":"Time"},
+  {"fieldname":"section_scope","fieldtype":"Section Break","label":"Scope"},
+  {"fieldname":"warehouse","fieldtype":"Link","in_list_view":1,"label":"Warehouse","options":"Gudang","reqd":1,"description":"Warehouse to be counted"},
+  {"fieldname":"opname_type","fieldtype":"Select","label":"Opname Type","options":"Full Count\nSpot Check","default":"Full Count"},
+  {"fieldname":"approved_by","fieldtype":"Data","label":"Approved By","read_only":1},
+  {"fieldname":"section_items","fieldtype":"Section Break","label":"Item Count"},
+  {"fieldname":"items","fieldtype":"Table","label":"Opname Items","options":"Stock Opname Item","reqd":1},
+  {"fieldname":"section_result","fieldtype":"Section Break","label":"Recap & Gain/Loss"},
+  {"fieldname":"total_system_qty","fieldtype":"Float","label":"Total System Qty (Kg)","read_only":1},
+  {"fieldname":"total_actual_qty","fieldtype":"Float","label":"Total Actual Qty (Kg)","read_only":1},
+  {"fieldname":"total_gain","fieldtype":"Float","label":"Total Gain (Kg)","read_only":1},
+  {"fieldname":"total_loss","fieldtype":"Float","label":"Total Loss (Kg)","read_only":1},
+  {"fieldname":"gain_loss_notes","fieldtype":"Small Text","label":"Gain/Loss Notes"},
+  {"fieldname":"section_notes","fieldtype":"Section Break","label":"Notes"},
+  {"fieldname":"notes","fieldtype":"Small Text","label":"Notes"}
+ ],
+ "grid_page_length":50,"index_web_pages_for_search":1,"is_submittable":1,"links":[],
+ "modified":"2026-04-08 00:00:00.000000","modified_by":"Administrator",
+ "module":"Inventory","name":"Stock Opname",
+ "naming_rule":"By \"Naming Series\" field","owner":"Administrator",
+ "permissions":[
+  {"cancel":1,"create":1,"delete":1,"email":1,"export":1,"print":1,"read":1,"report":1,"role":"System Manager","share":1,"submit":1,"write":1},
+  {"create":1,"email":1,"print":1,"read":1,"report":1,"role":"Warehouse Manager","submit":1,"write":1},
+  {"read":1,"report":1,"role":"Warehouse User"}
+ ],
+ "states":[
+  {"color":"Gray","title":"Draft"},{"color":"Orange","title":"In Progress"},
+  {"color":"Blue","title":"Recapitulated"},{"color":"Green","title":"Approved"},
+  {"color":"Red","title":"Cancelled"}
+ ],
+ "title_field":"warehouse","track_changes":1
+}
