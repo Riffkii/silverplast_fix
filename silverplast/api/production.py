@@ -20,22 +20,30 @@ def accept_material_request(docname):
         if not item.qty or item.qty <= 0:
             frappe.throw(f"Qty untuk {item.kode_barang} harus lebih dari 0")
 
-        gudang = frappe.get_doc("Gudang", item.kode_barang)
+        stok = frappe.get_doc("Stok", item.kode_barang)
 
-        current_stock = gudang.stok_saat_ini_ton or 0
+        current_stock = stok.qty or 0
 
         if current_stock < item.qty:
             frappe.throw(
-                f"Stok {item.kode_barang} tidak cukup. Tersedia: {current_stock}"
+                f"Stok {stok.item_code} tidak cukup. Tersedia: {current_stock}"
             )
 
-        new_stock = current_stock - item.qty
+    for item in doc.items:
+
+        stok = frappe.get_doc("Stok", item.kode_barang)
+
+        qty_sebelum = stok.qty or 0
+        qty_sesudah = qty_sebelum - item.qty
 
         frappe.db.set_value(
-            "Gudang",
-            gudang.name,
-            "stok_saat_ini_ton",
-            new_stock
+            "Stok",
+            stok.name,
+            {
+                "qty": qty_sesudah,
+                "qty_sebelum": qty_sebelum,
+                "qty_sesudah": qty_sesudah
+            }
         )
 
     frappe.db.set_value(
@@ -75,16 +83,19 @@ def send_to_qc(production_id, qty, materials=None):
         if qty_sisa <= 0:
             continue
 
-        gudang = frappe.get_doc("Gudang", kode_barang)
+        stok = frappe.get_doc("Stok", kode_barang)
 
-        current_stock = gudang.stok_saat_ini_ton or 0
-        new_stock = current_stock + qty_sisa
+        qty_sebelum = stok.qty_sesudah or 0
+        qty_sesudah = qty_sebelum + qty_sisa
 
         frappe.db.set_value(
-            "Gudang",
-            gudang.name,
-            "stok_saat_ini_ton",
-            new_stock
+            "Stok",
+            stok.name,
+            {
+                "qty": qty_sesudah,
+                "qty_sebelum": qty_sebelum,
+                "qty_sesudah": qty_sesudah
+            }
         )
 
     doc = frappe.get_doc({

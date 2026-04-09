@@ -13,7 +13,7 @@
    "fieldname": "kode_barang",
    "fieldtype": "Link",
    "label": "Kode Barang",
-   "options": "Gudang",
+   "options": "Stok",
    "in_list_view": 1,
    "reqd": 1
   },

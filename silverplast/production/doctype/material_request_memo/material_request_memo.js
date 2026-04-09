@@ -37,7 +37,7 @@ frappe.ui.form.on('Material Request Memo', {
             return {
                 filters: {
                     status: 'Aktif',
-                    stok_saat_ini_ton: ['>', 0],
+                    qty_sesudah: ['>', 0],
                     tipe_barang: ['in', ['Bahan Baku', 'Additive', 'Bahan Penolong']]
                 }
             };
