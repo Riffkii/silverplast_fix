@@ -28,6 +28,7 @@ def catat_transaksi_stok(
     uom="Kg",
     keterangan=None,
     allow_negative=False   # ← parameter baru, default TIDAK boleh minus
+    tipe_barang=None
 ):
     """
     Catat satu baris transaksi stok.
@@ -81,23 +82,24 @@ def catat_transaksi_stok(
 
     # Buat dokumen Stok
     doc = frappe.get_doc({
-        "doctype"        : "Stok",
-        "tanggal"        : nowdate(),
-        "jam"            : now_datetime().strftime("%H:%M:%S"),
-        "tipe_transaksi" : tipe_transaksi,
-        "item_code"      : item_code,
-        "item_name"      : item_name or item_code,
-        "qty"            : qty,
-        "uom"            : uom,
-        "batch_no"       : batch_no,
-        "gudang"         : gudang,
-        "area_rak"       : area_rak,
-        "qty_sebelum"    : qty_sebelum,
-        "qty_sesudah"    : qty_sesudah,
-        "ref_doctype"    : ref_doctype,
-        "ref_docname"    : ref_docname,
-        "keterangan"     : keterangan,
-        "status"         : "Aktif"
+        "doctype"         : "Stok",
+        "tanggal"         : nowdate(),
+        "jam"             : now_datetime().strftime("%H:%M:%S"),
+        "tipe_transaksi"  : tipe_transaksi,
+        "item_code"       : item_code,
+        "item_name"       : item_name or item_code,
+        "tipe_barang"     : tipe_barang,
+        "qty"             : qty,
+        "uom"             : uom,
+        "batch_no"        : batch_no,
+        "gudang"          : gudang,
+        "area_rak"        : area_rak,
+        "qty_sebelum"     : qty_sebelum,
+        "qty_sesudah"     : qty_sesudah,
+        "ref_doctype"     : ref_doctype,
+        "ref_docname"     : ref_docname,
+        "keterangan"      : keterangan,
+        "status"          : "Aktif"
     })
     doc.insert(ignore_permissions=True)
     return doc.name

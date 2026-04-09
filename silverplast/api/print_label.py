@@ -1,4 +1,5 @@
 import frappe
+from silverplast.inventory.doctype.stok.stok import catat_transaksi_stok
 
 @frappe.whitelist()
 def create_print_label(source_document):
@@ -10,8 +11,15 @@ def create_print_label(source_document):
     }):
         frappe.throw("Print Label already created")
 
+    if not source.item_code:
+        frappe.throw("Item Code wajib diisi")
+
+    if not source.qty or source.qty <= 0:
+        frappe.throw("Quantity harus lebih dari 0")
+
     item_code = source.item_code
-    qty = source.qty or 0
+    item_name = item_code 
+    qty = source.qty
     item_type = source.item_type
 
     tipe_map = {
@@ -21,39 +29,40 @@ def create_print_label(source_document):
     }
     tipe_barang = tipe_map.get(item_type, "Bahan Baku")
 
-    existing = frappe.db.get_value(
+    KODE_GUDANG_DEFAULT = "MAIN-WH"
+
+    gudang_name = frappe.db.get_value(
         "Gudang",
-        {"kode_barang": item_code},
-        ["name", "stok_saat_ini_ton"],
-        as_dict=True
+        {"kode_gudang": KODE_GUDANG_DEFAULT},
+        "name"
     )
 
-    if existing:
-        new_stock = (existing.stok_saat_ini_ton or 0) + qty
-
-        frappe.db.set_value(
-            "Gudang",
-            existing.name,
-            "stok_saat_ini_ton",
-            new_stock
-        )
-
-    else:
+    if not gudang_name:
         gudang = frappe.get_doc({
             "doctype": "Gudang",
-            "kode_gudang": f"GDG-{item_code}",
-            "nama_gudang": f"Gudang {item_code}",
+            "kode_gudang": KODE_GUDANG_DEFAULT,
+            "nama_gudang": "Gudang Utama",
             "level": "Gudang",
-            "kode_barang": item_code,
-            "tipe_barang": tipe_barang,
             "status": "Aktif",
-            "kapasitas_ton": 100,
-            "stok_saat_ini_ton": qty,
+            "kapasitas_ton": 1000,
             "pic": "System",
             "telepon": "-"
         })
-
         gudang.insert(ignore_permissions=True)
+        gudang_name = gudang.name
+
+    catat_transaksi_stok(
+        item_code=item_code,
+        item_name=item_name,
+        qty=qty,
+        gudang=gudang_name,
+        tipe_transaksi="Masuk",
+        ref_doctype="Item Receipt Document",
+        ref_docname=source.name,
+        uom="Kg",
+        keterangan="Auto dari Item Receipt",
+        tipe_barang=tipe_barang
+    )
 
     doc = frappe.get_doc({
         "doctype": "Print Label",

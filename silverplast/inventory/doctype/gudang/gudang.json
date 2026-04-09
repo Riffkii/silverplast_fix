@@ -67,8 +67,7 @@
    "in_list_view": 1,
    "in_standard_filter": 1,
    "label": "Tipe Barang",
-   "options": "\nBahan Baku\nAdditive\nBarang Jadi\nBahan Penolong\nCampuran",
-   "reqd": 1
+   "options": "\nBahan Baku\nAdditive\nBarang Jadi\nBahan Penolong\nCampuran"
   },
   {
    "default": "Aktif",
@@ -147,16 +146,16 @@
    "label": "Kode Barang"
   },
   {
+   "depends_on": "eval:doc.tipe_barang == 'Barang Jadi'",
    "fieldname": "rate",
    "fieldtype": "Currency",
-   "label": "Rate",
-   "depends_on": "eval:doc.tipe_barang == 'Barang Jadi'"
+   "label": "Rate"
   }
  ],
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2026-04-07 21:38:17.469940",
+ "modified": "2026-04-09 13:42:16.640940",
  "modified_by": "Administrator",
  "module": "Inventory",
  "name": "Gudang",
