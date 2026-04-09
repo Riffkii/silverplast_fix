@@ -26,7 +26,8 @@ def catat_transaksi_stok(
     area_rak=None,
     batch_no=None,
     uom="Kg",
-    keterangan=None
+    keterangan=None,
+    tipe_barang=None
 ):
     """
     Catat satu baris transaksi stok.
@@ -66,6 +67,7 @@ def catat_transaksi_stok(
         "tipe_transaksi"  : tipe_transaksi,
         "item_code"       : item_code,
         "item_name"       : item_name or item_code,
+        "tipe_barang"     : tipe_barang,
         "qty"             : qty,
         "uom"             : uom,
         "batch_no"        : batch_no,

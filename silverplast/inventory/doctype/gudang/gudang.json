@@ -67,8 +67,7 @@
    "in_list_view": 1,
    "in_standard_filter": 1,
    "label": "Tipe Barang",
-   "options": "\nBahan Baku\nAdditive\nBarang Jadi\nBahan Penolong\nCampuran",
-   "reqd": 1
+   "options": "\nBahan Baku\nAdditive\nBarang Jadi\nBahan Penolong\nCampuran"
   },
   {
    "default": "Aktif",
@@ -156,7 +155,7 @@
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2026-04-08 15:03:02.870387",
+ "modified": "2026-04-09 13:42:16.640940",
  "modified_by": "Administrator",
  "module": "Inventory",
  "name": "Gudang",
