@@ -61,13 +61,15 @@
    "reqd": 1
   },
   {
-   "description": "WH-03: bahan baku, additive, atau barang hasil produksi",
+   "depends_on": "eval:doc.level == 'Rak'",
+   "description": "Tipe barang di rak ini (informatif, tidak wajib)",
    "fieldname": "tipe_barang",
    "fieldtype": "Select",
    "in_list_view": 1,
    "in_standard_filter": 1,
    "label": "Tipe Barang",
-   "options": "\nBahan Baku\nAdditive\nBarang Jadi\nBahan Penolong\nCampuran"
+   "options": "\nBahan Baku\nAdditive\nBarang Jadi\nBahan Penolong\nCampuran",
+   "reqd": 0
   },
   {
    "default": "Aktif",
@@ -141,21 +143,23 @@
    "label": "Keterangan Tambahan"
   },
   {
+   "depends_on": "eval:doc.level == 'Rak'",
    "fieldname": "kode_barang",
    "fieldtype": "Data",
-   "label": "Kode Barang"
+   "label": "Kode Barang",
+   "description": "Kode barang yang disimpan di rak ini (merujuk tabStok)"
   },
   {
-   "depends_on": "eval:doc.tipe_barang == 'Barang Jadi'",
    "fieldname": "rate",
    "fieldtype": "Currency",
-   "label": "Rate"
+   "label": "Rate",
+   "depends_on": "eval:doc.tipe_barang == 'Barang Jadi'"
   }
  ],
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2026-04-09 13:42:16.640940",
+ "modified": "2026-04-10 00:00:00.000000",
  "modified_by": "Administrator",
  "module": "Inventory",
  "name": "Gudang",
@@ -163,31 +167,16 @@
  "owner": "Administrator",
  "permissions": [
   {
-   "create": 1,
-   "delete": 1,
-   "email": 1,
-   "export": 1,
-   "print": 1,
-   "read": 1,
-   "report": 1,
-   "role": "System Manager",
-   "share": 1,
-   "write": 1
+   "create": 1, "delete": 1, "email": 1, "export": 1,
+   "print": 1, "read": 1, "report": 1, "role": "System Manager",
+   "share": 1, "write": 1
   },
   {
-   "create": 1,
-   "email": 1,
-   "export": 1,
-   "print": 1,
-   "read": 1,
-   "report": 1,
-   "role": "Warehouse Manager",
-   "write": 1
+   "create": 1, "email": 1, "export": 1, "print": 1,
+   "read": 1, "report": 1, "role": "Warehouse Manager", "write": 1
   },
   {
-   "read": 1,
-   "report": 1,
-   "role": "Warehouse User"
+   "read": 1, "report": 1, "role": "Warehouse User"
   }
  ],
  "row_format": "Dynamic",
