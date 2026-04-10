@@ -69,10 +69,6 @@ def try_aggregate_production(source_incoming_qc):
 
     evaluate_qc_production(source_incoming_qc)
 
-import frappe
-from datetime import datetime, timedelta
-
-
 @frappe.whitelist()
 def evaluate_qc_production(source_incoming_qc):
 
@@ -109,17 +105,17 @@ def evaluate_qc_production(source_incoming_qc):
     elif (r1 == "Reject" and r2 == "Reject"):
         final_result = "Scrap"
 
-    gudang = frappe.db.get_value(
-        "Gudang",
-        {"kode_gudang": qct.item_code},
-        ["rate"],
+    stok = frappe.db.get_value(
+        "Stok",
+        qct.item_code,
+        ["name", "rate"],
         as_dict=True
     )
 
-    if not gudang:
-        frappe.throw(f"Barang {qct.item_code} tidak ditemukan di Gudang")
+    if not stok:
+        frappe.throw(f"Item {qct.item_code} tidak ditemukan di Stok")
 
-    rate = gudang.rate or 0
+    rate = stok.rate or 0
 
     now = datetime.now()
 

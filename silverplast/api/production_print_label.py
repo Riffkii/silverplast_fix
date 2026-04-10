@@ -16,23 +16,27 @@ def create_print_label(source_document):
     item_code = source.item_code
     qty = source.qty or 0
 
-    existing = frappe.db.get_value(
-        "Gudang",
-        {"kode_gudang": item_code},
-        ["name", "stok_saat_ini_ton"],
+    stok = frappe.db.get_value(
+        "Stok",
+        item_code,
+        ["name", "qty_sesudah"],
         as_dict=True
     )
 
-    if not existing:
-        frappe.throw(f"Barang {item_code} tidak ditemukan di Gudang")
+    if not stok:
+        frappe.throw(f"Item {item_code} tidak ditemukan di Stok")
 
-    new_stock = (existing.stok_saat_ini_ton or 0) + qty
+    qty_sebelum = stok.qty_sesudah or 0
+    qty_sesudah = qty_sebelum + qty
 
     frappe.db.set_value(
-        "Gudang",
-        existing.name,
-        "stok_saat_ini_ton",
-        new_stock
+        "Stok",
+        stok.name,
+        {
+            "qty": qty_sesudah,
+            "qty_sebelum": qty_sebelum,
+            "qty_sesudah": qty_sesudah
+        }
     )
 
     doc = frappe.get_doc({
