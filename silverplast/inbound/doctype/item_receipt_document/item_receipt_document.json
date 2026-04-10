@@ -9,6 +9,7 @@
   "item_code",
   "item_type",
   "qty",
+  "gudang",
   "msds_file",
   "rohs_file",
   "delivery_file",
@@ -76,6 +77,12 @@
    "fieldtype": "Select",
    "label": "Item Type",
    "options": "Bahan Baku\nAdditive\nBahan Penolong"
+  },
+  {
+   "fieldname": "gudang",
+   "fieldtype": "Link",
+   "label": "Pilih Gudang",
+   "options": "Gudang"
   }
  ],
  "grid_page_length": 50,

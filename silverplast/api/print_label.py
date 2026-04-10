@@ -17,10 +17,14 @@ def create_print_label(source_document):
     if not source.qty or source.qty <= 0:
         frappe.throw("Quantity harus lebih dari 0")
 
+    if not source.gudang:
+        frappe.throw("Gudang wajib dipilih")
+
     item_code = source.item_code
-    item_name = item_code 
+    item_name = item_code
     qty = source.qty
     item_type = source.item_type
+    gudang = source.gudang
 
     tipe_map = {
         "Bahan Baku": "Bahan Baku",
@@ -29,33 +33,11 @@ def create_print_label(source_document):
     }
     tipe_barang = tipe_map.get(item_type, "Bahan Baku")
 
-    KODE_GUDANG_DEFAULT = "MAIN-WH"
-
-    gudang_name = frappe.db.get_value(
-        "Gudang",
-        {"kode_gudang": KODE_GUDANG_DEFAULT},
-        "name"
-    )
-
-    if not gudang_name:
-        gudang = frappe.get_doc({
-            "doctype": "Gudang",
-            "kode_gudang": KODE_GUDANG_DEFAULT,
-            "nama_gudang": "Gudang Utama",
-            "level": "Gudang",
-            "status": "Aktif",
-            "kapasitas_ton": 1000,
-            "pic": "System",
-            "telepon": "-"
-        })
-        gudang.insert(ignore_permissions=True)
-        gudang_name = gudang.name
-
     catat_transaksi_stok(
         item_code=item_code,
         item_name=item_name,
         qty=qty,
-        gudang=gudang_name,
+        gudang=gudang,
         tipe_transaksi="Masuk",
         ref_doctype="Item Receipt Document",
         ref_docname=source.name,
