@@ -22,28 +22,39 @@ frappe.ui.form.on("Gudang", {
     kapasitas_ton(frm) { frm.trigger("show_capacity_info"); },
     stok_saat_ini_ton(frm) { frm.trigger("show_capacity_info"); },
 
-    // ─────────────────────────────────────────────
-    // FIX get_query: dipindah ke JS (tidak boleh di JSON)
-    // ─────────────────────────────────────────────
-
     toggle_fields_by_level(frm) {
         const isAreaOrRak = frm.doc.level === "Area" || frm.doc.level === "Rak";
+        const isRak       = frm.doc.level === "Rak";
 
+        // Induk Gudang: wajib untuk Area dan Rak
         frm.toggle_display("induk_gudang", isAreaOrRak);
         frm.toggle_reqd("induk_gudang",   isAreaOrRak);
-        frm.toggle_display("kapasitas_ton",      frm.doc.level !== "Rak");
-        frm.toggle_display("stok_saat_ini_ton",  frm.doc.level !== "Rak");
+
+        // Kapasitas: tampil untuk Gudang dan Area saja
+        frm.toggle_display("kapasitas_ton",     !isRak);
+        frm.toggle_display("stok_saat_ini_ton", !isRak);
+
+        // PIC: wajib hanya di level Gudang
         frm.toggle_reqd("pic", frm.doc.level === "Gudang");
+
+        // FIX: tipe_barang dan kode_barang — tampil HANYA di level Rak
+        // tipe_barang tidak pernah mandatory
+        frm.toggle_display("tipe_barang", isRak);
+        frm.toggle_reqd("tipe_barang",    false);   // ← tidak pernah wajib
+
+        frm.toggle_display("kode_barang", isRak);
+
+        // Rate: tampil hanya jika tipe_barang = Barang Jadi (sudah ada depends_on di JSON)
 
         // Filter induk berdasarkan level yang benar
         if (frm.doc.level === "Area") {
-            frm.set_query("induk_gudang", function () {
-                return { filters: { level: "Gudang", status: "Aktif" } };
-            });
-        } else if (frm.doc.level === "Rak") {
-            frm.set_query("induk_gudang", function () {
-                return { filters: { level: "Area", status: "Aktif" } };
-            });
+            frm.set_query("induk_gudang", () => ({
+                filters: { level: "Gudang", status: "Aktif" }
+            }));
+        } else if (isRak) {
+            frm.set_query("induk_gudang", () => ({
+                filters: { level: "Area", status: "Aktif" }
+            }));
         }
     },
 
@@ -56,13 +67,12 @@ frappe.ui.form.on("Gudang", {
         frm.dashboard.reset();
         if (!frm.doc.kapasitas_ton || frm.doc.level === "Rak") return;
 
-        const kap   = frm.doc.kapasitas_ton     || 0;
-        const stok  = frm.doc.stok_saat_ini_ton || 0;
-        const pct   = kap > 0 ? Math.min(Math.round(stok / kap * 100), 100) : 0;
+        const kap  = frm.doc.kapasitas_ton     || 0;
+        const stok = frm.doc.stok_saat_ini_ton || 0;
+        const pct  = kap > 0 ? Math.min(Math.round(stok / kap * 100), 100) : 0;
 
-        let warna = "#28a745";
-        let label = "Normal";
-        if (pct >= 90) { warna = "#dc3545"; label = "Hampir Penuh!"; }
+        let warna = "#28a745", label = "Normal";
+        if (pct >= 90)      { warna = "#dc3545"; label = "Hampir Penuh!"; }
         else if (pct >= 70) { warna = "#fd7e14"; label = "Perlu Perhatian"; }
 
         frm.dashboard.add_comment(
@@ -81,11 +91,11 @@ frappe.ui.form.on("Gudang", {
     },
 
     add_custom_buttons(frm) {
-        frm.add_custom_button(__("Sub-Lokasi"), function () {
+        frm.add_custom_button(__("Sub-Lokasi"), () => {
             frm.trigger("show_child_locations");
         }, __("Aksi"));
 
-        frm.add_custom_button(__("Riwayat Mutasi"), function () {
+        frm.add_custom_button(__("Riwayat Mutasi"), () => {
             frappe.set_route("List", "Mutasi Barang", {
                 source_warehouse: frm.doc.kode_gudang
             });
@@ -97,7 +107,7 @@ frappe.ui.form.on("Gudang", {
             method: "silverplast.api.gudang.get_child_locations",
             args: { kode_gudang: frm.doc.kode_gudang },
             callback(r) {
-                if (!r.message || r.message.length === 0) {
+                if (!r.message || !r.message.length) {
                     frappe.msgprint(__("Belum ada Area atau Rak di gudang ini."));
                     return;
                 }
@@ -121,7 +131,7 @@ frappe.ui.form.on("Gudang", {
                         </table>`,
                     wide: true,
                 });
-            },
+            }
         });
-    },
+    }
 });

@@ -27,7 +27,7 @@ def catat_transaksi_stok(
     batch_no=None,
     uom="Kg",
     keterangan=None,
-    allow_negative=False   # ← parameter baru, default TIDAK boleh minus
+    allow_negative=False,   # ← parameter baru, default TIDAK boleh minus
     tipe_barang=None
 ):
     """
